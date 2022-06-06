@@ -20,11 +20,13 @@ rule StarSOLO:
         
     threads: 10
     params:
-        type_sc=configfile["scRNAseqType"]
+        type_sc=configfile["scRNAseqType"],
+        genome_index=configfile["ref"]["genome_index"]
     shell:
         """
         STAR --genomeDir {params.genome_index} \
         --readFilesIn {input.fq1} {input.fq2} \
         --runThreadN {threads} \
-        --soloType {params.type_sc}
+        --soloType {params.type_sc} \
+        
         """

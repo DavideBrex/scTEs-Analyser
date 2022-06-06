@@ -1,6 +1,8 @@
 
 
-
+ref:
+  genome: "mouse"
+  genome_index: "/shares/CIBIO-Storage/CIBIO/sharedLC/mouse_genome/mouse_ref_gene_index_star.2.7.9"
 
 
 
