@@ -2,11 +2,29 @@
 
 import pandas as pd
 
-table_fastq=pd.read_csv("")
+#read fastq files
+table_fastq=pd.read_csv("Fastq_files.tsv", delimiter = "\t", index_col=False)
 
 
+#read config file
+configfile: "config.yaml"
+
+
+table_fastq.
 
 rule StarSOLO:
     input: 
+        fq1 = table_fastq["Fq1"],
+        fq2 = table_fastq["Fq2"]
     output: 
-    run: 
+        
+    threads: 10
+    params:
+        type_sc=configfile["scRNAseqType"]
+    shell:
+        """
+        STAR --genomeDir {params.genome_index} \
+        --readFilesIn {input.fq1} {input.fq2} \
+        --runThreadN {threads} \
+        --soloType {params.type_sc}
+        """
