@@ -1,0 +1,12 @@
+
+
+import pandas as pd
+
+table_fastq=pd.read_csv("")
+
+
+
+rule StarSOLO:
+    input: 
+    output: 
+    run: 
