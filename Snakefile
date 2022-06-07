@@ -12,11 +12,11 @@ configfile: "config.yaml"
 singularity: "/shares/CIBIO-Storage/GROUPS/sharedLC/Davide/containers/tes-analyser-cont.sif"
 
 
+organism_g=config["organism"]
+
 rule all:
     input:
-       "results/alignments/ESCs.bam"
-
-
+       "results/ESCs.hdf5"
 rule StarSOLO_10X:
     input: 
         fq1 = table_fastq["Fq1"],
@@ -44,7 +44,7 @@ rule StarSOLO_10X:
         --outMultimapperOrder Random \
         --runRNGseed 777 \
         --outSAMmultNmax 1 \
-        --limitBAMsortRAM 56736503447 \
+        --limitBAMsortRAM 200000000000 \
         --outFileNamePrefix {params.out_dir}
 
         mv {params.out_dir}Aligned.sortedByCoord.out.bam {output}
@@ -56,26 +56,34 @@ rule build_index_scTEs:
     params:
         organism=config["organism"]
     output:
-        gene_annot="resources/annot_file_genes.gtf.gz",
-        rmsk="resources/rmsk.txt.gz"
+        "resources/index.exclusive.idx"
     shell:
         """
         /home/davide.bressan-1/tools/scTE/bin/scTE_build -g {params.organism}
 
-        mv *.gtf.gz {output.gene_annot}
-        mv rmsk.txt.gz {output.rmsk}
+        mv {params.organism}.exclusive.idx resources/index.exclusive.idx 
         """
-
 
 
 
 rule run_scTEs:
-    input: rule.StarSOLO_10X.output
+    input: 
+        bam_file=rules.StarSOLO_10X.output,
+        index=rules.build_index_scTEs.output
     output: 
+        "results/ESCs.hdf5"
     params:
+        out="results/ESCs.hdf5",
+        organism=config["organism"]
+    threads: 5
     shell:
         """
-        scTE_build -g {organism}
+        /home/davide.bressan-1/tools/scTE/bin/scTE \
+        -i {input.bam_file} \
+        -o {params.out} \
+        -x {input.index}  \
+        -p {threads} \
+        --hdf5 True -CB CR -UMI UR    
         """ 
 
 

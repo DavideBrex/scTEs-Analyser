@@ -12,4 +12,4 @@ scRNAseqType: "CB_UMI_Simple"
 whitelist: "resources/whitelist_10X_v2_737K-august-2016.txt"
 
 
-organism: mm10
+organism: "mm10"
