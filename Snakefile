@@ -9,7 +9,6 @@ table_fastq=pd.read_csv("Fastq_files.tsv", delimiter = "\t", index_col=False)
 #read config file
 configfile: "config.yaml"
 #set image
-singularity: "/shares/CIBIO-Storage/GROUPS/sharedLC/Davide/containers/tes-analyser-cont.sif"
 
 
 rule all:
@@ -24,13 +23,15 @@ rule StarSOLO:
     output: 
         "results/alignments/ESCs.bam"
     threads: 20
+    container: "/shares/CIBIO-Storage/GROUPS/sharedLC/Davide/containers/tes-analyser-cont.sif"
+
     params:
         type_sc=config["scRNAseqType"],
         genome_index=config["ref"]["genome_index"],
         out_dir="results/alignments/",
         whitelist=config["whitelist"]
     run:
-        if params.type_sc == "CB UMI Simple":
+        if params.type_sc == "CB_UMI_Simple":
             shell("""
                 STAR --genomeDir {params.genome_index} \
                 --readFilesIn {input.fq2} {input.fq1} \

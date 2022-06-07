@@ -1,3 +1,0 @@
-NameError in line 26 of /shares/CIBIO-Storage/GROUPS/sharedLC/Davide/single-cell-TEs/scTEs-Analyser/Snakefile:
-name 'configfile' is not defined
-  File "/shares/CIBIO-Storage/GROUPS/sharedLC/Davide/single-cell-TEs/scTEs-Analyser/Snakefile", line 26, in <module>
