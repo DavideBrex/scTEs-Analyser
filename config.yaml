@@ -10,3 +10,6 @@ ref:
 #10X
 scRNAseqType: "CB_UMI_Simple"
 whitelist: "resources/whitelist_10X_v2_737K-august-2016.txt"
+
+
+organism: mm10

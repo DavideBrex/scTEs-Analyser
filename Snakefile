@@ -44,9 +44,26 @@ rule StarSOLO_10X:
         --outMultimapperOrder Random \
         --runRNGseed 777 \
         --outSAMmultNmax 1 \
+        --limitBAMsortRAM 56736503447 \
         --outFileNamePrefix {params.out_dir}
 
         mv {params.out_dir}Aligned.sortedByCoord.out.bam {output}
+        """
+
+
+#build index for scTEs
+rule build_index_scTEs:
+    params:
+        organism=config["organism"]
+    output:
+        gene_annot="resources/annot_file_genes.gtf.gz",
+        rmsk="resources/rmsk.txt.gz"
+    shell:
+        """
+        /home/davide.bressan-1/tools/scTE/bin/scTE_build -g {params.organism}
+
+        mv *.gtf.gz {output.gene_annot}
+        mv rmsk.txt.gz {output.rmsk}
         """
 
 
@@ -55,7 +72,11 @@ rule StarSOLO_10X:
 rule run_scTEs:
     input: rule.StarSOLO_10X.output
     output: 
-    run: 
+    params:
+    shell:
+        """
+        scTE_build -g {organism}
+        """ 
 
 
 
