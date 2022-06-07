@@ -6,4 +6,7 @@ ref:
 
 
 
+
+#10X
 scRNAseqType: "CB UMI Simple"
+whitelist: "resources/whitelist_10X_v2_737K-august-2016.txt"
